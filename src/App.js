@@ -1,8 +1,13 @@
 import logo from "./logo.svg";
 import "./App.css";
+import YouTubeForm from "./components/YoutubeForm";
 
 function App() {
-  return <div className="App"></div>;
+  return (
+    <div className="App">
+      <YouTubeForm />
+    </div>
+  );
 }
 
 export default App;
