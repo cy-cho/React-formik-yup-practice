@@ -1,7 +1,6 @@
 import React from "react";
 import { useFormik } from "formik";
-
-import { emailFormat } from "../helpers/tools";
+import * as Yup from "yup";
 
 const initialValues = {
   name: "Vishwas",
@@ -13,25 +12,16 @@ const onSubmit = (values) => {
   console.log("Form data", values);
 };
 
-const validate = (values) => {
-  let errors = {};
-
-  Object.keys(values).forEach((field) => {
-    if (!values[field]) {
-      errors[field] = "Required";
-    }
-  });
-
-  if (values.email && !emailFormat.test(values.email)) {
-    errors.email = "Invalid email format";
-  }
-  return errors;
-};
+const validationSchema = Yup.object({
+  name: Yup.string().required(),
+  email: Yup.string().email("Invalid email format").required(),
+  channel: Yup.string().required(),
+});
 
 function YoutubeForm() {
   const formik = useFormik({
     initialValues,
-    validate,
+    validationSchema,
     onSubmit,
   });
   console.log("form errors", formik.touched);
@@ -44,9 +34,7 @@ function YoutubeForm() {
             type="text"
             id="name"
             name="name"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.name}
+            {...formik.getFieldProps("name")}
           />
           {formik.touched.name && formik.errors.name && (
             <div className="error">{formik.errors.name}</div>
@@ -59,9 +47,7 @@ function YoutubeForm() {
             type="email"
             id="email"
             name="email"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.email}
+            {...formik.getFieldProps("email")}
           />
           {formik.touched.email && formik.errors.email && (
             <div className="error">{formik.errors.email}</div>
@@ -74,9 +60,7 @@ function YoutubeForm() {
             type="text"
             id="channel"
             name="channel"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.channel}
+            {...formik.getFieldProps("channel")}
           />
           {formik.touched.channel && formik.errors.channel && (
             <div className="error">{formik.errors.channel}</div>
